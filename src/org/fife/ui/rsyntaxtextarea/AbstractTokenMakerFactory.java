@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.fife.ui.rsyntaxtextarea.modes.DispatchTokenMaker;
+
 
 /**
  * Base class for {@link TokenMakerFactory} implementations.  A mapping from
@@ -95,6 +97,27 @@ public abstract class AbstractTokenMakerFactory extends TokenMakerFactory {
 	}
 
 
+  /**
+   * Adds a mapping from a key to a <code>TokenMakerCreatorIF</code>
+   *
+   * @param key The key.
+   * @param creator <code>TokenMakerCreatorIF</code> factory.
+   */
+	public void putMapping( String key, TokenMakerCreatorIF creator){
+	  tokenMakerMap.put(key, creator);
+	}
+	
+  /**
+   * Adds a mapping from a key to a <code>DispatchTokenMaker</code>
+   * using <code>DispatchTokenMaker.Tokenizer</code>
+   *
+   * @param key The key.
+   * @param tokenizer <code>DispatchTokenMaker.Tokenizer</code> dispatch.
+   */
+  public void putMapping( String key, DispatchTokenMaker.Tokenizer tokenizer){
+    tokenMakerMap.put(key, new DispatchTokenMakerCreator(tokenizer));
+  }
+
 	/**
 	 * Adds a mapping from a key to a <code>TokenMaker</code> implementation
 	 * class name.
@@ -105,14 +128,18 @@ public abstract class AbstractTokenMakerFactory extends TokenMakerFactory {
 	 * @see #putMapping(String, String)
 	 */
 	public void putMapping(String key, String className, ClassLoader cl) {
-		tokenMakerMap.put(key, new TokenMakerCreator(className, cl));
+		putMapping(key, new TokenMakerCreator(className, cl));
 	}
 
 
+	public static interface TokenMakerCreatorIF {
+	  TokenMaker create() throws Exception;
+	}
+	
 	/**
 	 * Wrapper that handles the creation of TokenMaker instances.
 	 */
-	private static class TokenMakerCreator {
+	public static class TokenMakerCreator implements TokenMakerCreatorIF {
 
 		private String className;
 		private ClassLoader cl;
@@ -127,6 +154,24 @@ public abstract class AbstractTokenMakerFactory extends TokenMakerFactory {
 		}
 
 	}
+
+	 /**
+   * Wrapper that handles the creation of DispatchTokenMaker instances.
+   */
+  public static class DispatchTokenMakerCreator implements TokenMakerCreatorIF {
+
+    protected DispatchTokenMaker.Tokenizer tokenizer;
+
+    public DispatchTokenMakerCreator(DispatchTokenMaker.Tokenizer tokenizer_) {
+      tokenizer = tokenizer_;
+    }
+
+    public TokenMaker create() throws Exception {
+      DispatchTokenMaker tokenMaker = new DispatchTokenMaker(tokenizer);
+      return tokenMaker;
+    }
+
+  }
 
 
 }
