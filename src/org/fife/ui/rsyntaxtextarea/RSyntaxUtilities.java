@@ -420,7 +420,7 @@ public class RSyntaxUtilities implements SwingConstants {
 			Token token = doc.getTokenListForLine(curLine);
 			token = RSyntaxUtilities.getTokenAtOffset(token, caretPosition);
 			// All brackets are always returned as "separators."
-			if (token.type!=Token.SEPARATOR) {
+			if (token == null || token.type!=Token.SEPARATOR) {
 				return input;
 			}
 			if (index<3) { // One of "{[("

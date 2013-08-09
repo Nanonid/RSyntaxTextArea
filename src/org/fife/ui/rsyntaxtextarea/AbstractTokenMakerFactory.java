@@ -50,7 +50,7 @@ public abstract class AbstractTokenMakerFactory extends TokenMakerFactory {
 	 *         if none matches the specified key.
 	 */
 	protected TokenMaker getTokenMakerImpl(String key) {
-		TokenMakerCreator tmc = (TokenMakerCreator)tokenMakerMap.get(key);
+		TokenMakerCreatorIF tmc = (TokenMakerCreatorIF)tokenMakerMap.get(key);
 		if (tmc!=null) {
 			try {
 				return tmc.create();
