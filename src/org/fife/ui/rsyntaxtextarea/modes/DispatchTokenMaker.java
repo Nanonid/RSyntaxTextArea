@@ -53,4 +53,8 @@ public class DispatchTokenMaker extends TokenMakerBase {
     return firstToken;
   }
 
+  public Token getFirstToken() {
+    return firstToken;
+  }
+
 }

@@ -54,13 +54,13 @@ public class RSyntaxTextAreaHighlighter extends BasicHighlighter {
 	 * Marked occurrences in the document (to be painted separately from
 	 * other highlights).
 	 */
-	private List markedOccurrences;
+	private List<HighlightInfo> markedOccurrences;
 
 	/**
 	 * Highlights from document parsers.  These should be painted "on top of"
 	 * all other highlights to ensure they are always above the selection.
 	 */
-	private List parserHighlights;
+	private List<HighlightInfo> parserHighlights;
 
 	/**
 	 * The default color used for parser notices when none is specified.
@@ -72,8 +72,8 @@ public class RSyntaxTextAreaHighlighter extends BasicHighlighter {
 	 * Constructor.
 	 */
 	public RSyntaxTextAreaHighlighter() {
-		markedOccurrences = new ArrayList();
-		parserHighlights = new ArrayList(0); // Often unused
+		markedOccurrences = new ArrayList<HighlightInfo>();
+		parserHighlights = new ArrayList<HighlightInfo>(0); // Often unused
 	}
 
 
@@ -156,7 +156,7 @@ public class RSyntaxTextAreaHighlighter extends BasicHighlighter {
 	void clearMarkOccurrencesHighlights() {
 		// Don't remove via the iterator; since our List is an ArrayList, this
 		// implies tons of System.arrayCopy()s 
-		for (Iterator i=markedOccurrences.iterator(); i.hasNext(); ) {
+		for (Iterator<HighlightInfo> i=markedOccurrences.iterator(); i.hasNext(); ) {
 			repaintListHighlight(i.next());
 		}
 		markedOccurrences.clear();
@@ -185,7 +185,7 @@ public class RSyntaxTextAreaHighlighter extends BasicHighlighter {
 	 */
 	public void clearParserHighlights(Parser parser) {
 
-		for (Iterator i=parserHighlights.iterator(); i.hasNext(); ) {
+		for (Iterator<HighlightInfo> i=parserHighlights.iterator(); i.hasNext(); ) {
 
 			HighlightInfo info = (HighlightInfo)i.next();
 
@@ -226,9 +226,9 @@ public class RSyntaxTextAreaHighlighter extends BasicHighlighter {
 	 * @return The list of marked occurrences, or an empty list if none.  The
 	 *         contents of this list will be of type {@link DocumentRange}.
 	 */
-	public List getMarkedOccurrences() {
-		List list = new ArrayList(markedOccurrences.size());
-		for (Iterator i=markedOccurrences.iterator(); i.hasNext(); ) {
+	public List<DocumentRange> getMarkedOccurrences() {
+		List<DocumentRange> list = new ArrayList<DocumentRange>(markedOccurrences.size());
+		for (Iterator<HighlightInfo> i=markedOccurrences.iterator(); i.hasNext(); ) {
 			HighlightInfo info = (HighlightInfo)i.next();
 			int start = info.getStartOffset();
 			int end = info.getEndOffset() + 1; // HACK
@@ -260,7 +260,7 @@ public class RSyntaxTextAreaHighlighter extends BasicHighlighter {
 	}
 
 
-	private void paintList(Graphics g, List highlights) {
+	private void paintList(Graphics g, List<HighlightInfo> highlights) {
 
 		int len = highlights.size();
 
@@ -313,7 +313,7 @@ public class RSyntaxTextAreaHighlighter extends BasicHighlighter {
 
 
 	private void paintListLayered(Graphics g, int p0, int p1, Shape viewBounds,
-						JTextComponent editor, View view, List highlights) {
+						JTextComponent editor, View view, List<HighlightInfo> highlights) {
 		for (int i=highlights.size()-1; i>=0; i--) {
 			Object tag = highlights.get(i);
 			if (tag instanceof LayeredHighlightInfo) {

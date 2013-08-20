@@ -133,7 +133,11 @@ import org.fife.ui.rtextarea.RecordableTextAction;
  */
 public class RSyntaxTextArea extends RTextArea implements SyntaxConstants {
 
-	public static final String ANIMATE_BRACKET_MATCHING_PROPERTY		= "RSTA.animateBracketMatching";
+	/**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+  public static final String ANIMATE_BRACKET_MATCHING_PROPERTY		= "RSTA.animateBracketMatching";
 	public static final String ANTIALIAS_PROPERTY						= "RSTA.antiAlias";
 	public static final String AUTO_INDENT_PROPERTY						= "RSTA.autoIndent";
 	public static final String BRACKET_MATCHING_PROPERTY				= "RSTA.bracketMatching";
@@ -1232,7 +1236,6 @@ private boolean fractionalFontMetricsEnabled;
 	 * @return The height of a line of text in this text area.
 	 */
 	public int getLineHeight() {
-		//System.err.println("... getLineHeight() returning " + lineHeight);
 		return lineHeight;
 	}
 
@@ -1248,7 +1251,7 @@ private boolean fractionalFontMetricsEnabled;
 	 *
 	 * @return The list of marked occurrences.
 	 */
-	public List getMarkedOccurrences() {
+	public List<DocumentRange> getMarkedOccurrences() {
 		return ((RSyntaxTextAreaHighlighter)getHighlighter()).
 											getMarkedOccurrences();
 	}
@@ -2845,8 +2848,8 @@ private boolean fractionalFontMetricsEnabled;
 	 * A timer that animates the "bracket matching" animation.
 	 */
 	private class BracketMatchingTimer extends Timer implements ActionListener {
-
-		private int pulseCount;
+    private static final long serialVersionUID = 1L;
+    private int pulseCount;
 
 		public BracketMatchingTimer() {
 			super(20, null);
@@ -2911,7 +2914,12 @@ private boolean fractionalFontMetricsEnabled;
 	private class RSyntaxTextAreaMutableCaretEvent
 					extends RTextAreaMutableCaretEvent {
 
-		protected RSyntaxTextAreaMutableCaretEvent(RTextArea textArea) {
+		/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    protected RSyntaxTextAreaMutableCaretEvent(RTextArea textArea) {
 			super(textArea);
 		}
 
